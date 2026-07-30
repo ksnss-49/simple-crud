@@ -12,6 +12,8 @@ interface User {
   createdAt: string;
 }
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+
 function Home() {
   const [mounted, setMounted] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
@@ -38,7 +40,7 @@ function Home() {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const response = await axios.get<User[]>("http://localhost:3000/users");
+      const response = await axios.get<User[]>(`${API_URL}/users`);
       // Sort users by id descending so the newest additions appear at the top
       const sortedUsers = response.data.sort((a, b) => b.id - a.id);
       setUsers(sortedUsers);
@@ -87,7 +89,7 @@ function Home() {
 
     try {
       setSaving(true);
-      await axios.post("http://localhost:3000/users", {
+      await axios.post(`${API_URL}/users`, {
         name: trimmedName,
         email: trimmedEmail,
       });
